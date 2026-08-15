@@ -1575,6 +1575,7 @@ class DAMXDaemon:
         try:
             # Initialize DAMXManager
             self.manager = DAMXManager()
+            log.info(f"Driver Version: {self.manager.get_driver_version()}")
 
             # Initialize keyboard monitor early
             # self.keyboard_monitor = KeyboardMonitor(
@@ -1588,9 +1589,8 @@ class DAMXDaemon:
             #     log.error("Failed to start keyboard monitoring")
             #     # Don't return False here - continue with reduced functionality
 
-            # Initialize power monitor
+            # Initialize power monitor (started in run())
             self.power_monitor = PowerSourceDetector(self.manager)
-            self.power_monitor.start_monitoring()
 
             # Log detected features
             features_str = ", ".join(sorted(self.manager.available_features))
@@ -1689,8 +1689,6 @@ def signal_handler(self, sig, frame):
 def main():
     """Main function"""
     args = parse_args()
-    
-    log.info(f"Driver Version: {DAMXManager().get_driver_version()}")
 
     # Set log level based on verbosity
     if args.verbose:
